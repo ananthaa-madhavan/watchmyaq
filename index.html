@@ -2,30 +2,38 @@
 <html>
 <head>
   <title>BreathSafeSTL</title>
- <link rel="stylesheet" href="style.css">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
-  
+
 <body>
+
+  <!-- TOP HEADER -->
   <div class="top-banner">BreathSafeSTL</div>
 
-<div class="navbar">
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-  <a href="design.html">Design Process</a>
-</div>
-  <script src="script.js"></script>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="design.html">Design Process</a>
+  </div>
+
+  <!-- MAP LAYER (background) -->
+  <div id="map"></div>
+
+  <!-- UI CONTENT (foreground) -->
   <div class="container">
     <h1>BreathSafeSTL</h1>
     <p>St. Louis Air Quality & Allergen Monitoring System</p>
     <p class="sub">Live dashboard coming soon.</p>
-
-    <div class="links">
-      <a href="about.html">About</a>
-      <a href="design.html">Design Process</a>
-    </div>
   </div>
-  <div id="map"></div>
+
+  <!-- SCRIPT LAST (IMPORTANT) -->
+  <script src="script.js"></script>
+
 </body>
 </html>
