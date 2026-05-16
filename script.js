@@ -10,7 +10,11 @@ let heatLayer = null;
 // ===============================
 // PARTICLES
 // ===============================
+
 function spawnParticles() {
+  // ❌ don't spawn particles on map page (prevents visual overlap issues)
+  if (document.getElementById("map")) return;
+
   const colors = ["green", "yellow", "orange", "red"];
 
   for (let i = 0; i < 60; i++) {
