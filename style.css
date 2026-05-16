@@ -162,3 +162,30 @@ p {
 .navbar a:hover {
   background: #2c7be5;
 }
+
+/* heat layer container */
+.heat-dot {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  filter: blur(18px);
+  opacity: 0.35;
+}
+
+/* colors */
+.heat-green {
+  background: #2ecc71;
+}
+
+.heat-yellow {
+  background: #f1c40f;
+}
+
+.heat-orange {
+  background: #e67e22;
+}
+
+.heat-red {
+  background: #e74c3c;
+}
