@@ -65,6 +65,10 @@ function initMap() {
     .addTo(map)
     .bindPopup(`PM2.5: ${p.pm25}`);
   });
+  map.setMaxBounds([
+  [38.45, -90.85],
+  [38.85, -90.25]
+]);
 }
 
 // ---------- INIT SAFE WRAPPER ----------
