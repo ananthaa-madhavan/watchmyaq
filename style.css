@@ -217,3 +217,57 @@ p {
 .pm-toggle button.active {
   background: #0b2a4a;
 }
+
+.pm-panel {
+  position: absolute;
+  top: 110px;
+  right: 15px;
+  z-index: 1000;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  background: #0b2a4a;
+  padding: 12px;
+  border-radius: 12px;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  width: 120px;
+}
+
+/* title */
+.pm-title {
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  opacity: 0.9;
+  text-align: center;
+}
+
+/* buttons */
+.pm-panel button {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.15);
+
+  padding: 6px 8px;
+  border-radius: 8px;
+
+  cursor: pointer;
+  font-size: 13px;
+
+  transition: 0.2s;
+}
+
+.pm-panel button:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* active state */
+.pm-panel button.active {
+  background: white;
+  color: #0b2a4a;
+  font-weight: 600;
+}
