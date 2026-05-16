@@ -1,29 +1,9 @@
 
+let currentPM = "pm25";
+
 // ===============================
-// BreathSafeSTL GLOBAL SCRIPT
+// PARTICLES
 // ===============================
-
-// ---------- PARTICLES ----------
-
-let heatLayer = L.layerGroup().addTo(map);
-
-function addHeat(p) {
-  let val = p.pm25;
-
-  let colorClass =
-    val < 20 ? "heat-green" :
-    val < 50 ? "heat-yellow" :
-    val < 80 ? "heat-orange" :
-    "heat-red";
-
-  const heatIcon = L.divIcon({
-    className: "",
-    html: `<div class="heat-dot ${colorClass}"></div>`,
-    iconSize: [40, 40]
-  });
-
-  L.marker([p.lat, p.lon], { icon: heatIcon }).addTo(heatLayer);
-}
 function spawnParticles() {
   const colors = ["green", "yellow", "orange", "red"];
 
@@ -45,67 +25,101 @@ function spawnParticles() {
   }
 }
 
-// ---------- MAP ----------
+// ===============================
+// MAP
+// ===============================
+
+function setPM(type) {
+  currentPM = type;
+
+  if (window.mapInstance) {
+    window.mapInstance.remove();
+    initMap();
+  }
+
+  document.querySelectorAll(".pm-toggle button").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  const activeBtn = document.querySelector(
+    `.pm-toggle button[onclick="setPM('${type}')"]`
+  );
+
+  if (activeBtn) activeBtn.classList.add("active");
+}
+
 function initMap() {
   const mapDiv = document.getElementById("map");
 
-  // IMPORTANT: only run if map exists
-  if (!mapDiv) {
-    console.log("No map on this page — skipping Leaflet init");
-    return;
-  }
+  if (!mapDiv) return;
 
-  const map = L.map("map").setView([38.6631, -90.5771], 13);
+  window.mapInstance = L.map("map").setView([38.6631, -90.5771], 13);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors"
-  }).addTo(map);
+  }).addTo(window.mapInstance);
 
-  // fake sensor data (replace with Firebase later)
-  const data = [
-    { lat: 38.65, lon: -90.55, pm25: 30 },
-    { lat: 38.63, lon: -90.52, pm25: 55 },
-    { lat: 38.60, lon: -90.50, pm25: 80 }
-  ];
+  // IMPORTANT: heat layer must be created AFTER map exists
+  let heatLayer = L.layerGroup().addTo(window.mapInstance);
 
-  function getColor(val) {
-    return val < 20 ? "#2ecc71"
-         : val < 50 ? "#f1c40f"
-         : "#e74c3c";
+  function addHeat(p, value) {
+    let colorClass =
+      value < 20 ? "heat-green" :
+      value < 50 ? "heat-yellow" :
+      value < 80 ? "heat-orange" :
+      "heat-red";
+
+    const heatIcon = L.divIcon({
+      className: "",
+      html: `<div class="heat-dot ${colorClass}"></div>`,
+      iconSize: [40, 40]
+    });
+
+    L.marker([p.lat, p.lon], { icon: heatIcon }).addTo(heatLayer);
   }
 
- 
-data.forEach(p => {
+  const data = [
+    { lat: 38.65, lon: -90.55, pm1: 10, pm25: 30, pm10: 60 },
+    { lat: 38.63, lon: -90.52, pm1: 15, pm25: 55, pm10: 90 },
+    { lat: 38.60, lon: -90.50, pm1: 25, pm25: 80, pm10: 120 }
+  ];
 
-  // ---- DOT LAYER (actual sensor reading)
-  L.circleMarker([p.lat, p.lon], {
-    radius: 5,
-    color: "black",
-    weight: 1,
-    fillColor:
-      p.pm25 < 20 ? "#2ecc71" :
-      p.pm25 < 50 ? "#f1c40f" :
-      "#e74c3c",
-    fillOpacity: 0.9
-  }).addTo(map);
+  function getValue(p) {
+    return currentPM === "pm1" ? p.pm1 :
+           currentPM === "pm10" ? p.pm10 :
+           p.pm25;
+  }
 
-  // ---- HEAT LAYER (gradient glow)
-  addHeat(p);
+  data.forEach(p => {
 
-});
-  map.setMaxBounds([
-  [38.45, -90.85],
-  [38.85, -90.25]
-]);
+    const value = getValue(p);
+
+    // DOT LAYER
+    L.circleMarker([p.lat, p.lon], {
+      radius: 5,
+      color: "black",
+      weight: 1,
+      fillColor:
+        value < 20 ? "#2ecc71" :
+        value < 50 ? "#f1c40f" :
+        "#e74c3c",
+      fillOpacity: 0.9
+    }).addTo(window.mapInstance);
+
+    // HEAT LAYER
+    addHeat(p, value);
+  });
+
+  window.mapInstance.setMaxBounds([
+    [38.45, -90.85],
+    [38.85, -90.25]
+  ]);
 }
 
-// ---------- INIT SAFE WRAPPER ----------
+// ===============================
+// INIT
+// ===============================
 window.onload = function () {
-  console.log("BreathSafeSTL script loaded");
-
-  // only spawn particles if body exists (always true, but safe)
   spawnParticles();
-
-  // only init map if present
   initMap();
 };
