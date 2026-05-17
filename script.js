@@ -44,6 +44,7 @@ function getValue(p) {
 // ===============================
 function initMap() {
   const mapDiv = document.getElementById("map");
+  mapInstance.on("moveend", updateWeatherTiles);
   if (!mapDiv) return;
 
   mapInstance = L.map("map", {
@@ -129,6 +130,28 @@ async function fetchWeather(lat, lon) {
   const data = await res.json();
 
   return data.current;
+}
+
+function getMapCenter() {
+  if (!mapInstance) return null;
+  const c = mapInstance.getCenter();
+  return { lat: c.lat, lon: c.lng };
+}
+
+async function updateWeatherTiles() {
+  const center = getMapCenter();
+  if (!center) return;
+
+  const weather = await fetchWeather(center.lat, center.lon);
+
+  document.getElementById("tempTile").innerText =
+    Math.round(weather.temperature_2m) + "°F";
+
+  document.getElementById("uvTile").innerText =
+    weather.uv_index;
+
+  document.getElementById("weatherTile").innerText =
+    weather.weather_code;
 }
 
 // ===============================
