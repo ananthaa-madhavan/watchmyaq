@@ -110,13 +110,13 @@ function renderData() {
 function setPM(type) {
   currentPM = type;
 
-  renderData();
-
+  // update button UI state
   document.querySelectorAll(".pm-toggle button").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.pm === type);
   });
-}
 
+  renderData();
+}
 // ===============================
 // INIT
 // ===============================
