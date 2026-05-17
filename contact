@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Contact - BreathSafeSTL</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- TOP BANNER -->
+  <div class="top-banner">BreathSafeSTL</div>
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="design.html">Air Quality</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="container">
+
+    <h1>Contact</h1>
+
+    <p>
+      Feel free to reach out for questions, collaboration, or feedback.
+    </p>
+
+    <div class="about-card">
+
+      <h3>Email</h3>
+      <p id="emailBox">your.email@example.com</p>
+
+    </div>
+
+    <div class="about-card">
+
+      <h3>Phone</h3>
+      <p id="phoneBox">(000) 000-0000</p>
+
+    </div>
+
+    <div class="about-card">
+
+      <h3>Project Note</h3>
+      <p>
+        This project is currently in development. Data collection and sensor integration
+        will continue to improve over time.
+      </p>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
