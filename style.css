@@ -73,6 +73,33 @@ body::before {
   z-index: 1;
 }
 
+/* Leaflet internal layers must stay under UI */
+.leaflet-pane {
+  z-index: 1 !important;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 2 !important;
+}
+
+/* =======================
+   PARTICLES (ABOVE MAP, BELOW UI)
+======================= */
+
+.particle {
+  position: fixed;
+
+  border-radius: 50%;
+  opacity: 0.65;
+
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+
+  pointer-events: none;
+
+  z-index: 0; /* 👈 KEY CHANGE */
+}
+
 /* =======================
    FOREGROUND CONTENT
 ======================= */
