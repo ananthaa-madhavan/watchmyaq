@@ -5,11 +5,9 @@ let dotLayer = null;
 let heatLayer = null;
 
 // ===============================
-// PARTICLES (disabled on map page)
+// PARTICLES (ALL PAGES)
 // ===============================
 function spawnParticles() {
-  if (document.getElementById("map")) return;
-
   const colors = ["green", "yellow", "orange", "red"];
 
   for (let i = 0; i < 60; i++) {
@@ -42,7 +40,7 @@ function getValue(p) {
 }
 
 // ===============================
-// MAP INIT
+// MAP INIT (WITH BOUNDS FIX)
 // ===============================
 function initMap() {
   const mapDiv = document.getElementById("map");
@@ -63,7 +61,6 @@ function initMap() {
   dotLayer = L.layerGroup().addTo(mapInstance);
   heatLayer = L.layerGroup().addTo(mapInstance);
 
-  // 🔒 HARD BOUNDS (FIXES FREE DRAGGING BUG)
   const bounds = L.latLngBounds(
     [38.45, -90.85],
     [38.85, -90.25]
@@ -71,7 +68,7 @@ function initMap() {
 
   mapInstance.setMaxBounds(bounds);
 
-  mapInstance.on("drag", function () {
+  mapInstance.on("drag", () => {
     mapInstance.panInsideBounds(bounds, { animate: false });
   });
 }
@@ -108,7 +105,7 @@ function renderData() {
 }
 
 // ===============================
-// PM TOGGLE (FIXED CLEAN VERSION)
+// PM TOGGLE (FIXED)
 // ===============================
 function setPM(type) {
   currentPM = type;
