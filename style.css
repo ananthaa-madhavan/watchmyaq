@@ -2,15 +2,30 @@
   box-sizing: border-box;
 }
 
+/* =======================
+   BASE (FIXED SCROLL RULES)
+======================= */
+
 body {
   margin: 0;
   font-family: "Segoe UI", system-ui, Arial;
   background: #ffffff;
-  overflow: hidden;
+
+  overflow-x: hidden;
+  overflow-y: auto;   /* ✅ allows ABOUT + DESIGN to scroll */
+
   color: #1f2d3d;
 }
 
-/* GRID BACKGROUND */
+/* ONLY index (map page) becomes fullscreen locked */
+body:has(#map) {
+  overflow: hidden;
+}
+
+/* =======================
+   GRID BACKGROUND
+======================= */
+
 body::before {
   content: "";
   position: fixed;
@@ -23,57 +38,139 @@ body::before {
   pointer-events: none;
 }
 
-/* MAP */
+/* =======================
+   MAP
+======================= */
+
 #map {
   height: 100vh;
   width: 100vw;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
   z-index: 1;
-  position: relative;
 }
 
-/* TOP BAR */
+/* =======================
+   FOREGROUND CONTAINER
+======================= */
+
+.container {
+  position: relative;
+  z-index: 10;
+
+  max-width: 900px;
+  margin: 80px auto;
+  text-align: center;
+}
+
+/* =======================
+   TEXT
+======================= */
+
+h1 {
+  font-size: 52px;
+  color: #174a7a;
+  margin-bottom: 10px;
+}
+
+p {
+  color: #4b5b6b;
+  font-size: 17px;
+}
+
+/* =======================
+   ABOUT CARDS
+======================= */
+
+.about-card {
+  background: #0b2a4a;
+  color: white;
+
+  padding: 22px;
+  border-radius: 14px;
+  margin-top: 18px;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+
+  text-align: left;
+  line-height: 1.6;
+}
+
+.about-card h3 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.about-card p {
+  color: rgba(255,255,255,0.85);
+  font-size: 15px;
+}
+
+/* =======================
+   TOP BANNER
+======================= */
+
 .top-banner {
   background: #0b2a4a;
   color: white;
+
   padding: 16px 24px;
   font-size: 22px;
   font-weight: 600;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 5000;
+
+  position: relative;
+  z-index: 9999;
 }
 
-/* NAVBAR */
+/* =======================
+   NAVBAR
+======================= */
+
 .navbar {
-  position: absolute;
-  top: 56px;
-  width: 100%;
+  position: relative;
+  z-index: 9999;
+
   display: flex;
   justify-content: center;
   gap: 12px;
-  z-index: 4000;
+
+  background: #0f3b66;
+  padding: 10px;
 }
 
 .navbar a {
-  background: #1f5fa8;
   color: white;
+  text-decoration: none;
+
   padding: 8px 14px;
   border-radius: 8px;
-  text-decoration: none;
+
+  background: #1f5fa8;
 }
 
-/* PM PANEL */
+.navbar a:hover {
+  background: #2c7be5;
+}
+
+/* =======================
+   PM PANEL (RIGHT)
+======================= */
+
 .pm-toggle {
   position: absolute;
   top: 110px;
   right: 15px;
+
   z-index: 3000;
 
   background: #0b2a4a;
   padding: 12px;
   border-radius: 12px;
-  width: 120px;
+
+  width: 130px;
 
   display: flex;
   flex-direction: column;
@@ -84,14 +181,19 @@ body::before {
   color: white;
   font-size: 12px;
   text-align: center;
+  font-weight: 600;
 }
 
 .pm-toggle button {
   background: rgba(255,255,255,0.1);
   color: white;
+
   border: none;
   padding: 6px;
+
   border-radius: 6px;
+
+  cursor: pointer;
 }
 
 .pm-toggle button.active {
@@ -99,11 +201,15 @@ body::before {
   color: #0b2a4a;
 }
 
-/* 🌡 DATA PANEL (LEFT SIDE) */
+/* =======================
+   DATA TILES (LEFT PANEL)
+======================= */
+
 #data-panel {
   position: absolute;
   top: 110px;
   left: 15px;
+
   z-index: 3000;
 
   display: flex;
@@ -116,10 +222,11 @@ body::before {
   width: 140px;
   height: 110px;
 
-  background: #0b2a4a;
+  background: rgba(11, 42, 74, 0.92);
   color: white;
 
   border-radius: 14px;
+
   box-shadow: 0 10px 25px rgba(0,0,0,0.25);
 
   display: flex;
@@ -138,3 +245,22 @@ body::before {
   font-weight: 700;
   margin-top: 6px;
 }
+
+/* =======================
+   HEAT DOTS (map visuals)
+======================= */
+
+.heat-dot {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+
+  filter: blur(18px);
+  opacity: 0.35;
+}
+
+.heat-green { background: #2ecc71; }
+.heat-yellow { background: #f1c40f; }
+.heat-orange { background: #e67e22; }
+.heat-red { background: #e74c3c; }
