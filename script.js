@@ -45,7 +45,10 @@ function getValue(p) {
 function buildHeatData(data) {
   return data.map(p => {
     const value = getValue(p);
-    const intensity = Math.min(value / 120, 1);
+
+    // 🔥 FIXED: stronger contrast for visible gradients
+    const intensity = Math.min(Math.pow(value / 60, 1.25), 1);
+
     return [p.lat, p.lon, intensity];
   });
 }
@@ -64,15 +67,17 @@ function initMap() {
 
   dotLayer = L.layerGroup().addTo(mapInstance);
 
+  // 🔥 FIXED HEATMAP SETTINGS (this is the big change)
   heatLayer = L.heatLayer([], {
-    radius: 40,
-    blur: 25,
+    radius: 85,          // bigger = visible blending
+    blur: 45,            // smoother gradient
     maxZoom: 17,
+    minOpacity: 0.35,    // ensures visibility even with few points
     gradient: {
-      0.0: "green",
-      0.4: "yellow",
-      0.7: "orange",
-      1.0: "red"
+      0.0: "#2ecc71",    // green
+      0.3: "#f1c40f",    // yellow
+      0.6: "#e67e22",    // orange
+      1.0: "#e74c3c"     // red
     }
   }).addTo(mapInstance);
 
@@ -83,7 +88,7 @@ function initMap() {
 }
 
 // ===============================
-// RENDER DATA (UPDATED WITH POPUPS)
+// RENDER DATA
 // ===============================
 function renderData() {
   if (!mapInstance) return;
@@ -113,7 +118,6 @@ function renderData() {
       fillOpacity: 0.9
     });
 
-    // ✅ POPUP ADDED HERE
     marker.bindPopup(`
       <div style="font-family:Segoe UI; font-size:13px;">
         <b>Sensor Reading</b><br><br>
