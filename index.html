@@ -5,32 +5,37 @@
 
   <link rel="stylesheet" href="style.css">
 
-  <!-- Leaflet -->
+  <!-- Leaflet (KEEP for now) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+
+  <!-- ❌ REMOVE heat plugin (we are not using it anymore) -->
 </head>
 
 <body>
 
+  <!-- TOP BANNER -->
   <div class="top-banner">BreathSafeSTL</div>
 
+  <!-- NAVBAR -->
   <div class="navbar">
     <a href="index.html">Home</a>
     <a href="about.html">About</a>
     <a href="design.html">Design Process</a>
   </div>
 
-  <!-- PM TOGGLE -->
+  <!-- PM TOGGLE (RIGHT SIDE) -->
   <div class="pm-toggle">
+
     <div class="pm-title">PM Layers</div>
 
     <button onclick="setPM('pm1')">PM1</button>
     <button onclick="setPM('pm25')" class="active">PM2.5</button>
     <button onclick="setPM('pm10')">PM10</button>
+
   </div>
 
-  <!-- 🌡 DATA TILES -->
+  <!-- 🌡 DATA TILES (LEFT SIDE DASHBOARD) -->
   <div id="data-panel">
 
     <div class="tile">
@@ -58,6 +63,7 @@
   <!-- MAP -->
   <div id="map"></div>
 
+  <!-- SCRIPT LAST -->
   <script src="script.js"></script>
 
 </body>
