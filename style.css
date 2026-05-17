@@ -1,4 +1,3 @@
-
 * {
   box-sizing: border-box;
 }
@@ -176,7 +175,7 @@ p {
 .heat-red { background: #e74c3c; }
 
 /* =======================
-   PM TOGGLE PANEL (FIXED)
+   PM TOGGLE PANEL (FIXED CLEAN)
 ======================= */
 
 .pm-toggle {
@@ -197,7 +196,7 @@ p {
   width: 120px;
 }
 
-/* ONLY ONE TITLE SYSTEM */
+/* SINGLE TITLE (NO DUPLICATE TEXT BUG FIXED) */
 .pm-title {
   color: white;
   font-size: 13px;
@@ -228,4 +227,40 @@ p {
   background: white;
   color: #0b2a4a;
   font-weight: 600;
+}
+
+/* =======================
+   🌡 LEFT DATA PANEL (NEW FIX)
+======================= */
+
+#data-panel {
+  position: absolute;
+  top: 110px;
+  left: 15px;
+  z-index: 3000;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tile {
+  width: 150px;
+  padding: 10px;
+  border-radius: 12px;
+
+  background: #0b2a4a;
+  color: white;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.tile small {
+  display: block;
+  margin-top: 5px;
+  opacity: 0.7;
+  font-size: 10px;
 }
