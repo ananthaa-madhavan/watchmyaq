@@ -164,7 +164,7 @@ async function updateWeatherTiles() {
   const uv = document.getElementById("uvTile");
   const wx = document.getElementById("weatherTile");
 
-  if (temp) temp.innerText = Math.round(weather.temperature_2m) + "°F";
+  if (temp) temp.innerText = Math.round(weather.temperature_2m) + "°C";
   if (uv) uv.innerText = weather.uv_index;
   if (wx) wx.innerText = weatherCodeToText(weather.weather_code);
 }
