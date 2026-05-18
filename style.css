@@ -306,7 +306,3 @@ p {
 .heat-yellow { background: #f1c40f; }
 .heat-orange { background: #e67e22; }
 .heat-red { background: #e74c3c; }
-
-.soft-aura {
-  filter: blur(35px);
-}
