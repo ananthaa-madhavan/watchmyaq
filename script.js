@@ -4,6 +4,8 @@ let mapInstance = null;
 let dotLayer = null;
 let heatLayer = null;
 
+let mapReady = false; // ✅ FIX ADDED
+
 // ===============================
 // PARTICLES
 // ===============================
@@ -40,7 +42,7 @@ function getValue(p) {
 }
 
 // ===============================
-// MAP INIT (SAFE)
+// MAP INIT
 // ===============================
 function initMap() {
   const mapDiv = document.getElementById("map");
@@ -73,6 +75,8 @@ function initMap() {
   });
 
   mapInstance.on("moveend", updateWeatherTiles);
+
+  mapReady = true; // ✅ CRITICAL FIX
 }
 
 // ===============================
@@ -105,7 +109,10 @@ function getData() {
 
     liveData.push(point);
 
-    renderData(liveData);
+    // ✅ FIX: prevent render before map is ready
+    if (mapReady) {
+      renderData(liveData);
+    }
   });
 }
 
@@ -266,7 +273,6 @@ window.onload = function () {
     getData();
     updateWeatherTiles();
 
-    // ONLY cleanup interval (no redundant render)
     setInterval(() => {
       cleanOldData();
     }, 60 * 1000);
