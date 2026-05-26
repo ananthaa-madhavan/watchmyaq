@@ -107,7 +107,9 @@ function getData() {
   timestamp: new Date(d.DateTime).getTime()
 };
 
-    liveData.push(point);
+  cleanNearbyPoints(point);
+
+liveData.push(point);
 updatePointCounter();
     // ✅ FIX: prevent render before map is ready
     if (mapReady) {
@@ -195,7 +197,20 @@ function cleanOldData() {
     return (now - p.timestamp) <= DAY;
   });
 }
+function cleanNearbyPoints(newPoint) {
 
+  const THREE_MILES = 4828; // meters
+
+  liveData = liveData.filter(oldPoint => {
+
+    const dist = mapInstance.distance(
+      [newPoint.lat, newPoint.lon],
+      [oldPoint.lat, oldPoint.lon]
+    );
+
+    return dist > THREE_MILES;
+  });
+}
 function updatePointCounter() {
   const counter = document.getElementById("pointCounter");
 
