@@ -108,7 +108,7 @@ function getData() {
 };
 
     liveData.push(point);
-
+updatePointCounter();
     // ✅ FIX: prevent render before map is ready
     if (mapReady) {
       renderData(liveData);
@@ -196,6 +196,13 @@ function cleanOldData() {
   });
 }
 
+function updatePointCounter() {
+  const counter = document.getElementById("pointCounter");
+
+  if (!counter) return;
+
+  counter.innerText = `Points: ${liveData.length}`;
+}
 // ===============================
 // PM TOGGLE
 // ===============================
@@ -272,9 +279,10 @@ window.onload = function () {
     initMap();
     getData();
     updateWeatherTiles();
-
+    
     setInterval(() => {
       cleanOldData();
+      updatePointCounter();
     }, 60 * 1000);
   }
 };
