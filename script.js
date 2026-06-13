@@ -114,7 +114,6 @@ if ((Date.now() - point.timestamp) > DAY) {
   return;
 }
 
-// Remove points within 3 miles
 liveData = liveData.filter(existing => {
 
   const dist = mapInstance.distance(
@@ -122,7 +121,11 @@ liveData = liveData.filter(existing => {
     [existing.lat, existing.lon]
   );
 
-  return dist >= THREE_MILES;
+  if (dist < THREE_MILES) {
+    return existing.timestamp > point.timestamp;
+  }
+
+  return true;
 });
 
 liveData.push(point);
