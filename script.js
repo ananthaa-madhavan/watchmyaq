@@ -4,8 +4,9 @@ let mapInstance = null;
 let dotLayer = null;
 let heatLayer = null;
 
-let mapReady = false; // ✅ FIX ADDED
+let mapReady = false;
 console.log("SCRIPT LOADED");
+
 // ===============================
 // PARTICLES
 // ===============================
@@ -85,6 +86,7 @@ function initMap() {
 
   mapReady = true;
 }
+
 // ===============================
 // FIREBASE
 // ===============================
@@ -103,44 +105,44 @@ function getData() {
   sensorRef.on("child_added", (snapshot) => {
 
     const d = snapshot.val();
-const point = {
-  lat: d.Latitude,
-  lon: d.Longitude,
-  pm1: d.PM10,
-  pm25: d.PM25,
-  pm10: d.PM100,
-  timestamp: new Date(d.DateTime).getTime()
-};
+    const point = {
+      lat: d.Latitude,
+      lon: d.Longitude,
+      pm1: d.PM10,
+      pm25: d.PM25,
+      pm10: d.PM100,
+      timestamp: new Date(d.DateTime).getTime()
+    };
 
-const DAY = 24 * 60 * 60 * 1000;
-const THREE_MILES = 4828;
+    const DAY = 24 * 60 * 60 * 1000;
+    const THREE_MILES = 4828;
 
-// Ignore old points immediately
-if ((Date.now() - point.timestamp) > DAY) {
-  return;
-}
+    // Ignore old points immediately
+    if ((Date.now() - point.timestamp) > DAY) {
+      return;
+    }
 
-liveData = liveData.filter(existing => {
+    liveData = liveData.filter(existing => {
 
-  const dist = mapInstance.distance(
-    [point.lat, point.lon],
-    [existing.lat, existing.lon]
-  );
+      const dist = mapInstance.distance(
+        [point.lat, point.lon],
+        [existing.lat, existing.lon]
+      );
 
-  if (dist < THREE_MILES) {
-    return existing.timestamp > point.timestamp;
-  }
+      if (dist < THREE_MILES) {
+        return existing.timestamp > point.timestamp;
+      }
 
-  return true;
-});
+      return true;
+    });
 
-liveData.push(point);
+    liveData.push(point);
 
-updatePointCounter();
+    updatePointCounter();
 
-if (mapReady) {
-  renderData(liveData);
-}
+    if (mapReady) {
+      renderData(liveData);
+    }
   });
 }
 
@@ -166,7 +168,6 @@ function renderData(data) {
       v < 80 ? "#e67e22" :
                "#e74c3c";
 
-    // Normalize PM value to a 0–1 intensity for the heat gradient
     const intensity = Math.min(v / 100, 1);
     heatPoints.push([p.lat, p.lon, intensity]);
 
@@ -201,16 +202,10 @@ function cleanOldData() {
   const DAY = 24 * 60 * 60 * 1000;
   const THREE_MILES = 4828;
 
-  // ===============================
-  // REMOVE OLD POINTS
-  // ===============================
   liveData = liveData.filter(p => {
     return (now - p.timestamp) <= DAY;
   });
 
-  // ===============================
-  // REMOVE NEARBY DUPLICATES
-  // ===============================
   const cleaned = [];
 
   liveData.forEach(point => {
@@ -225,7 +220,6 @@ function cleanOldData() {
       return dist < THREE_MILES;
     });
 
-    // keep only non-nearby points
     if (!tooClose) {
       cleaned.push(point);
     }
@@ -237,11 +231,10 @@ function cleanOldData() {
 
 function updatePointCounter() {
   const counter = document.getElementById("pointCounter");
-
   if (!counter) return;
-
   counter.innerText = `Points: ${liveData.length}`;
 }
+
 // ===============================
 // PM TOGGLE
 // ===============================
@@ -255,11 +248,15 @@ function setPM(type) {
   renderData(liveData);
 }
 
+// ===============================
+// WEATHER
+// ===============================
 async function fetchWeather(lat, lon) {
   try {
     const res = await fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,uv_index,weather_code&timezone=auto`
     );
+
     const data = await res.json();
     return data.current;
   } catch (e) {
@@ -281,6 +278,44 @@ async function fetchAQI(lat, lon) {
   }
 }
 
+function weatherCodeToEmoji(code) {
+  const map = {
+    0: "☀️",
+    1: "🌤️",
+    2: "⛅",
+    3: "☁️",
+    45: "🌫️",
+    48: "🌫️",
+    51: "🌦️",
+    53: "🌦️",
+    55: "🌦️",
+    56: "🌧️",
+    57: "🌧️",
+    61: "🌧️",
+    63: "🌧️",
+    65: "🌧️",
+    66: "🌧️",
+    67: "🌧️",
+    71: "❄️",
+    73: "❄️",
+    75: "❄️",
+    77: "❄️",
+    80: "🌦️",
+    81: "🌧️",
+    82: "⛈️",
+    85: "❄️",
+    86: "❄️",
+    95: "⛈️",
+    96: "⛈️",
+    99: "⛈️"
+  };
+
+  return map[code] || "❓";
+}
+
+// ===============================
+// WEATHER TILES
+// ===============================
 async function updateWeatherTiles() {
   const center = mapInstance?.getCenter();
   if (!center) return;
@@ -305,24 +340,96 @@ async function updateWeatherTiles() {
 }
 
 // ===============================
+// ANALYTICS PAGE
+// ===============================
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.innerText = value;
+}
+
+function initAnalytics() {
+  const sensorRef = db.ref("sensorData");
+
+  sensorRef.once("value", (snapshot) => {
+    const all = [];
+
+    snapshot.forEach(child => {
+      const d = child.val();
+      if (d.Latitude && d.Longitude && d.DateTime && typeof d.PM25 === "number") {
+        all.push({
+          pm25: d.PM25,
+          timestamp: new Date(d.DateTime).getTime()
+        });
+      }
+    });
+
+    if (all.length === 0) return;
+
+    const DAY = 24 * 60 * 60 * 1000;
+    const now = Date.now();
+
+    const pm25Values = all.map(p => p.pm25);
+    const historicalAvg = pm25Values.reduce((a, b) => a + b, 0) / pm25Values.length;
+    const historicalBest = Math.min(...pm25Values);
+    const historicalWorst = Math.max(...pm25Values);
+
+    const timestamps = all.map(p => p.timestamp);
+    const earliest = Math.min(...timestamps);
+    const latest = Math.max(...timestamps);
+    const daysMonitored = Math.max(1, Math.ceil((now - earliest) / DAY));
+
+    const recent = all.filter(p => (now - p.timestamp) <= DAY);
+    const recentPM25 = recent.map(p => p.pm25);
+
+    const currentAvg = recentPM25.length
+      ? recentPM25.reduce((a, b) => a + b, 0) / recentPM25.length
+      : null;
+    const currentBest = recentPM25.length ? Math.min(...recentPM25) : null;
+    const currentWorst = recentPM25.length ? Math.max(...recentPM25) : null;
+
+    setText("activePoints", recent.length);
+    setText("currentAvg", currentAvg !== null ? currentAvg.toFixed(1) : "--");
+    setText("currentBest", currentBest !== null ? currentBest.toFixed(1) : "--");
+    setText("currentWorst", currentWorst !== null ? currentWorst.toFixed(1) : "--");
+
+    setText("totalReadings", all.length);
+    setText("daysMonitored", daysMonitored);
+    setText("historicalAvg", historicalAvg.toFixed(1));
+    setText("historicalBest", historicalBest.toFixed(1));
+    setText("historicalWorst", historicalWorst.toFixed(1));
+    setText("latestReading", new Date(latest).toLocaleString());
+  });
+}
+
+// ===============================
 // INIT
 // ===============================
 window.onload = function () {
   spawnParticles();
 
   if (document.getElementById("map")) {
-    initMap();
-    getData();
+    try {
+      initMap();
+    } catch (e) {
+      console.error("Map init failed:", e);
+    }
+
+    try {
+      getData();
+    } catch (e) {
+      console.error("Data fetch failed:", e);
+    }
+
     updateWeatherTiles();
-    
-   setInterval(() => {
 
-  cleanOldData();
+    setInterval(() => {
+      cleanOldData();
+      updatePointCounter();
+      renderData(liveData);
+    }, 60 * 1000);
+  }
 
-  updatePointCounter();
-
-  renderData(liveData);
-
-}, 60 * 1000);
+  if (document.getElementById("activePoints")) {
+    initAnalytics();
   }
 };
