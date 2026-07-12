@@ -61,13 +61,20 @@ function initMap() {
   }).addTo(mapInstance);
 
   dotLayer = L.layerGroup().addTo(mapInstance);
-  heatLayer = L.layerGroup().addTo(mapInstance);
 
-  const bounds = L.latLngBounds(
-    [38.45, -90.85],
-    [38.85, -90.25]
-  );
+  heatLayer = L.heatLayer([], {
+    radius: 45,
+    blur: 35,
+    minOpacity: 0.45,
+    gradient: {
+      0.2: "#2ecc71",
+      0.5: "#f1c40f",
+      0.75: "#e67e22",
+      1.0: "#e74c3c"
+    }
+  }).addTo(mapInstance);
 
+  const bounds = L.latLngBounds([38.45, -90.85], [38.85, -90.25]);
   mapInstance.setMaxBounds(bounds);
 
   mapInstance.on("drag", () => {
@@ -76,9 +83,8 @@ function initMap() {
 
   mapInstance.on("moveend", updateWeatherTiles);
 
-  mapReady = true; // ✅ CRITICAL FIX
+  mapReady = true;
 }
-
 // ===============================
 // FIREBASE
 // ===============================
