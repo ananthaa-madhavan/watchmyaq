@@ -153,9 +153,10 @@ function renderData(data) {
   if (!data || data.length === 0) return;
 
   dotLayer.clearLayers();
-  heatLayer.clearLayers();
 
-  data.forEach((p, i) => {
+  const heatPoints = [];
+
+  data.forEach((p) => {
 
     const v = getValue(p);
 
@@ -165,31 +166,9 @@ function renderData(data) {
       v < 80 ? "#e67e22" :
                "#e74c3c";
 
-    let maxDist = 0;
-
-    for (let j = 0; j < data.length; j++) {
-
-      if (i === j) continue;
-
-      const dist = mapInstance.distance(
-        [p.lat, p.lon],
-        [data[j].lat, data[j].lon]
-      );
-
-      if (dist > maxDist) {
-        maxDist = dist;
-      }
-    }
-
-    const auraRadius = maxDist * 1.1;
-
-   L.circleMarker([p.lat, p.lon], {
-  radius: 30,
-  stroke: false,
-  fillColor: color,
-  fillOpacity: 0.03,
-  className: "soft-aura"
-}).addTo(heatLayer);
+    // Normalize PM value to a 0–1 intensity for the heat gradient
+    const intensity = Math.min(v / 100, 1);
+    heatPoints.push([p.lat, p.lon, intensity]);
 
     const time = new Date(p.timestamp).toLocaleString();
 
@@ -208,8 +187,9 @@ function renderData(data) {
       PM10: ${p.pm10}<br>
       Time: ${time}
     `);
-
   });
+
+  heatLayer.setLatLngs(heatPoints);
 }
 
 // ===============================
