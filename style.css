@@ -324,6 +324,54 @@ p {
   opacity: 0.65;
 }
 /* =======================
+   AIR QUALITY INFO COLUMNS
+======================= */
+
+.column-grid {
+  width: 95%;
+  max-width: 1300px;
+
+  margin: 40px auto;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 25px;
+
+  position: relative;
+  z-index: 10;
+}
+
+.aq-column {
+  background: #0b2a4a;
+  color: white;
+
+  padding: 22px;
+  border-radius: 14px;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+
+  text-align: left;
+  line-height: 1.6;
+}
+
+.aq-column h3 {
+  margin-top: 0;
+  font-size: 20px;
+  text-align: center;
+}
+
+.aq-column p {
+  color: rgba(255,255,255,0.85);
+  font-size: 15px;
+}
+
+@media (max-width: 800px) {
+  .column-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =======================
    ANALYTICS PAGE
 ======================= */
 
