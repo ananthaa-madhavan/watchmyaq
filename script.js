@@ -56,10 +56,10 @@ function initMap() {
     maxBoundsViscosity: 1.0
   });
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; OpenStreetMap contributors",
-    noWrap: true
-  }).addTo(mapInstance);
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+  attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+  noWrap: true
+}).addTo(mapInstance);
 
   dotLayer = L.layerGroup().addTo(mapInstance);
 
