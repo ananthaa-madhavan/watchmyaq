@@ -63,17 +63,19 @@ function initMap() {
 
   dotLayer = L.layerGroup().addTo(mapInstance);
 
-  heatLayer = L.heatLayer([], {
-    radius: 45,
-    blur: 35,
-    minOpacity: 0.45,
-    gradient: {
-      0.2: "#2ecc71",
-      0.5: "#f1c40f",
-      0.75: "#e67e22",
-      1.0: "#e74c3c"
-    }
-  }).addTo(mapInstance);
+heatLayer = L.heatLayer([], {
+  radius: 90,
+  blur: 70,
+  maxZoom: 14,
+  minOpacity: 0.35,
+  gradient: {
+    0.1: "#00ff00",
+    0.3: "#ffff00",
+    0.5: "#ffa500",
+    0.7: "#ff4500",
+    1.0: "#ff0000"
+  }
+}).addTo(mapInstance);
 
   const bounds = L.latLngBounds([38.45, -90.85], [38.85, -90.25]);
   mapInstance.setMaxBounds(bounds);
@@ -168,7 +170,7 @@ function renderData(data) {
       v < 80 ? "#e67e22" :
                "#e74c3c";
 
-    const intensity = Math.min(v / 100, 1);
+    const intensity = Math.min(v / 50, 1);
     heatPoints.push([p.lat, p.lon, intensity]);
 
     const time = new Date(p.timestamp).toLocaleString();
