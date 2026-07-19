@@ -365,6 +365,9 @@ function initAnalytics() {
       }
     });
 
+    // Show total readings regardless of whether entries pass validation
+    setText("totalReadings", snapshot.numChildren());
+
     if (all.length === 0) return;
 
     const DAY = 24 * 60 * 60 * 1000;
@@ -394,8 +397,6 @@ function initAnalytics() {
     setText("currentBest", currentBest !== null ? currentBest.toFixed(1) : "--");
     setText("currentWorst", currentWorst !== null ? currentWorst.toFixed(1) : "--");
 
-    // Show the raw total number of readings stored in Firebase
-    setText("totalReadings", snapshot.numChildren());
     setText("daysMonitored", daysMonitored);
     setText("historicalAvg", historicalAvg.toFixed(1));
     setText("historicalBest", historicalBest.toFixed(1));

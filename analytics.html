@@ -3,6 +3,24 @@
 <head>
   <title>Analytics - WatchmyAQ</title>
   <link rel="stylesheet" href="style.css">
+  <!-- FIREBASE -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <!-- FIREBASE CONFIG -->
+  <script>
+  const firebaseConfig = {
+  apiKey: "AIzaSyCFRvZi65j0SSUXdp1KhGvCqMB_oRo0smo",
+  authDomain: "arduino-uno-r4-wifi-d875e.firebaseapp.com",
+  databaseURL: "https://arduino-uno-r4-wifi-d875e-default-rtdb.firebaseio.com",
+  projectId: "arduino-uno-r4-wifi-d875e",
+  storageBucket: "arduino-uno-r4-wifi-d875e.firebasestorage.app",
+  messagingSenderId: "86549040602",
+  appId: "1:86549040602:web:2a174937be69e7019684e3"
+};
+
+    firebase.initializeApp(firebaseConfig);
+  </script>
 </head>
 
 <body>
